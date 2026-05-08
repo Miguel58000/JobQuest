@@ -45,9 +45,6 @@ cd backend && npm run dev
 ```bash
 # Frontend
 npm run build:prod
-
-# Backend
-cd backend && npm start
 ```
 
 ---
@@ -70,17 +67,32 @@ job-quest/
 ```
 
 ---
+
+## Environment Variables | Variables de Entorno
+
+### Backend (.env)
+```bash
+PORT=3000
+JWT_SECRET=your-secure-key-min-32-chars
+DATABASE_URL=postgresql://user:pass@host:5432/db  # Optional: PostgreSQL URL
+```
+
+---
+
+## Deployment | Despliegue
+
+### Vercel (Recommended) | Vercel (Recomendado)
+
+1. Push to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add environment variable `JWT_SECRET`
+4. (Optional) Add `DATABASE_URL` for PostgreSQL persistence
+
 ### Manual Deployment | Despliegue Manual
 
 ```bash
-# Frontend
 npm run build:prod
 # Upload dist/job-quest/ to your static host
-
-# Backend
-cd backend
-npm install --production
-npm start
 ```
 
 ---
@@ -112,10 +124,11 @@ npm start
 - English and Spanish translations
 - CSV export functionality
 - Responsive design for mobile and desktop
+- PostgreSQL support for data persistence
 
 ---
 
-# JobQuest - Seguimiento de Postulaciones Laborales
+## JobQuest - Seguimiento de Postulaciones Laborales
 
 > **Tablero visual para seguir tu búsqueda laboral. Monitorea postulaciones, entrevistas, ofertas y rechazos en un solo lugar.**
 
@@ -156,7 +169,6 @@ npm run build:prod
 
 ## Estructura del Proyecto
 
-
 ```
 job-quest/
 ├── src/                    # Frontend en Angular
@@ -173,6 +185,18 @@ job-quest/
 ```
 
 ---
+
+## Despliegue
+
+### Vercel (Recomendado)
+
+1. Subir a GitHub
+2. Importar en [Vercel](https://vercel.com)
+3. Agregar variable `JWT_SECRET`
+4. (Opcional) Agregar `DATABASE_URL` para PostgreSQL
+
+---
+
 ## Historial de Versiones
 
 ## [1.0.0] - Versión Inicial
@@ -186,3 +210,4 @@ job-quest/
 - Traducciones EN/ES
 - Exportación CSV
 - Diseño responsivo
+- Soporte PostgreSQL para persistencia
