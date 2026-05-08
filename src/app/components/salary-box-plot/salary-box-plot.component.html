@@ -1,0 +1,58 @@
+<div class="box-plot-container" *ngIf="hasData(); else noData">
+  @if (salaryStats()) {
+    <div class="plot-wrapper">
+      <div class="axis-line"></div>
+      
+      <svg class="box-plot-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <line x1="0" y1="50" x2="100" y2="50" class="baseline" />
+        <line [attr.x1]="0" y1="48" x2="100" y2="48" class="whisker-h" />
+        <line x1="0" y1="45" x2="0" y2="55" class="whisker-cap" />
+        <line x1="100" y1="45" x2="100" y2="55" class="whisker-cap" />
+        <rect 
+          [attr.x]="getQ1Position()" 
+          y="30" 
+          [attr.width]="getBoxWidth()" 
+          height="40" 
+          class="box-rect"
+        />
+        <line [attr.x1]="getQ1Position()" y1="25" [attr.x2]="getQ1Position()" y2="75" class="quartile-line" />
+        <line [attr.x1]="getQ3Position()" y1="25" [attr.x2]="getQ3Position()" y2="75" class="quartile-line" />
+        <line [attr.x1]="getMedianPosition()" y1="25" [attr.x2]="getMedianPosition()" y2="75" class="median-line" />
+      </svg>
+      
+      <div class="labels-row">
+        <div class="label-item" [style.left.%]="0">
+          <span class="label-min">Min</span>
+          <span class="label-value">{{ formatSalary(salaryStats()!.min) }}</span>
+        </div>
+        <div class="label-item" [style.left.%]="getQ1Position()">
+          <span class="label-q1">Q1</span>
+          <span class="label-value">{{ formatSalary(salaryStats()!.q1) }}</span>
+        </div>
+        <div class="label-item" [style.left.%]="getMedianPosition()">
+          <span class="label-med">Med</span>
+          <span class="label-value">{{ formatSalary(salaryStats()!.median) }}</span>
+        </div>
+        <div class="label-item" [style.left.%]="getQ3Position()">
+          <span class="label-q3">Q3</span>
+          <span class="label-value">{{ formatSalary(salaryStats()!.q3) }}</span>
+        </div>
+        <div class="label-item" [style.left.%]="100">
+          <span class="label-max">Max</span>
+          <span class="label-value">{{ formatSalary(salaryStats()!.max) }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="sample-size">
+      {{ 'basedOnSalaries' | i18n:{ n: salaryStats()!.salaries.length, plural: getPlural() } }}
+    </div>
+  }
+</div>
+
+<ng-template #noData>
+  <div class="no-data">
+    <p>{{ 'noSalaryData' | i18n }}</p>
+    <p class="hint">{{ 'addSalaryHint' | i18n }}</p>
+  </div>
+</ng-template>

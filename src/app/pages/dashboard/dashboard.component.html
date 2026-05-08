@@ -1,0 +1,126 @@
+<div class="dashboard-container animate-fade">
+  <header class="header">
+    <h1>{{ 'welcome' | i18n }}</h1>
+    <p class="subtitle">{{ 'subtitle' | i18n }}</p>
+  </header>
+
+  <div class="stats-grid">
+    <app-stats-card [label]="'totalApplications' | i18n" [value]="stats().total" type="applied">
+    </app-stats-card>
+
+    <app-stats-card [label]="'interviews' | i18n" [value]="stats().interviews" type="interview">
+    </app-stats-card>
+
+    <app-stats-card [label]="'offers' | i18n" [value]="stats().offers" type="offer">
+    </app-stats-card>
+
+    <app-stats-card [label]="'rejected' | i18n" [value]="stats().rejected" type="rejected">
+    </app-stats-card>
+  </div>
+
+  <section class="percentages-section">
+    <h2 class="section-title">{{ 'statusBreakdown' | i18n }}</h2>
+    <div class="percentages-grid">
+      @for (status of statusBreakdown(); track status.type) {
+      <div class="percentage-card glass-panel">
+        <div class="percentage-ring"
+          [style.background]="'conic-gradient(' + status.color + ' 0% ' + status.percentage + '%, rgba(255,255,255,0.1) ' + status.percentage + '% 100%)'">
+          <span class="percentage-value">{{ status.percentage }}%</span>
+        </div>
+        <span class="percentage-label">{{ status.label | i18n }}</span>
+      </div>
+      }
+    </div>
+  </section>
+
+  <section class="percentages-section">
+    <h2 class="section-title">{{ 'areaBreakdown' | i18n }}</h2>
+    @if (areaBreakdown().length > 0) {
+    <div class="percentages-grid">
+      @for (area of areaBreakdown(); track area.area) {
+      <div class="percentage-card glass-panel">
+        <div class="percentage-ring"
+          [style.background]="'conic-gradient(' + area.color + ' 0% ' + area.percentage + '%, rgba(255,255,255,0.1) ' + area.percentage + '% 100%)'">
+          <span class="percentage-value">{{ area.percentage }}%</span>
+        </div>
+        <span class="percentage-label">{{ area.label }}</span>
+        <span class="percentage-count">{{ area.count }}</span>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="no-data glass-panel">
+      <p>{{ 'noAreaData' | i18n }}</p>
+      <p class="hint">{{ 'addAreaHint' | i18n }}</p>
+    </div>
+    }
+  </section>
+
+  <section class="salary-section">
+    <h2 class="section-title">{{ 'salaryDistribution' | i18n }}</h2>
+    @if (salaryStats()) {
+    <div class="box-plot-container glass-panel">
+      <div class="plot-wrapper">
+        <svg class="box-plot-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="0" y1="50" x2="100" y2="50" class="baseline" />
+          @if (salaryStats()!.min !== salaryStats()!.max) {
+          <line x1="0" y1="48" x2="100" y2="48" class="whisker-h" />
+          <line x1="0" y1="45" x2="0" y2="55" class="whisker-cap" />
+          <line x1="100" y1="45" x2="100" y2="55" class="whisker-cap" />
+          <rect [attr.x]="getQ1Position()" y="30" [attr.width]="getBoxWidth()" height="40" class="box-rect" />
+          <line [attr.x1]="getQ1Position()" y1="25" [attr.x2]="getQ1Position()" y2="75" class="quartile-line" />
+          <line [attr.x1]="getQ3Position()" y1="25" [attr.x2]="getQ3Position()" y2="75" class="quartile-line" />
+          <line [attr.x1]="getMedianPosition()" y1="25" [attr.x2]="getMedianPosition()" y2="75" class="median-line" />
+          } @else {
+          <circle cx="50" cy="50" r="3" class="median-dot" />
+          <line x1="50" y1="20" x2="50" y2="80" class="median-line" />
+          }
+        </svg>
+
+        <div class="labels-row">
+          @if (salaryStats()!.min === salaryStats()!.max) {
+          <div class="label-item" style="left: 50%">
+            <span class="label-med">{{ 'salary' | i18n }}</span>
+            <span class="label-value">{{ formatSalary(salaryStats()!.median) }}</span>
+          </div>
+          } @else {
+          <div class="label-item align-left" style="left: 0%">
+            <span class="label-min">Min</span>
+            <span class="label-value">{{ formatSalary(salaryStats()!.min) }}</span>
+          </div>
+          @if (getBoxWidth() > 20) {
+          <div class="label-item" [style.left.%]="getQ1Position()">
+            <span class="label-q1">Q1</span>
+            <span class="label-value">{{ formatSalary(salaryStats()!.q1) }}</span>
+          </div>
+          }
+          <div class="label-item" [style.left.%]="getMedianPosition()">
+            <span class="label-med">Med</span>
+            <span class="label-value">{{ formatSalary(salaryStats()!.median) }}</span>
+          </div>
+          @if (getBoxWidth() > 20) {
+          <div class="label-item" [style.left.%]="getQ3Position()">
+            <span class="label-q3">Q3</span>
+            <span class="label-value">{{ formatSalary(salaryStats()!.q3) }}</span>
+          </div>
+          }
+          <div class="label-item align-right" style="left: 100%">
+            <span class="label-max">Max</span>
+            <span class="label-value">{{ formatSalary(salaryStats()!.max) }}</span>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="sample-size">
+        {{ getSalaryText() }}
+      </div>
+    </div>
+    } @else {
+    <div class="no-data glass-panel">
+      <p>{{ 'noSalaryData' | i18n }}</p>
+      <p class="hint">{{ 'addSalaryHint' | i18n }}</p>
+    </div>
+    }
+  </section>
+</div>

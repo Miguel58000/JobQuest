@@ -1,0 +1,93 @@
+<ng-container *ngIf="isAuthenticated(); else authLayout">
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        @if (isAuthenticated() && userName()) {
+        <span class="user-greeting">{{ 'hello' | i18n }}, {{ userName() }}</span>
+        }
+      </div>
+      <div class="header-controls">
+        <button class="icon-btn" (click)="toggleTheme()" [attr.title]="'toggleTheme' | i18n">
+          @if (isDark) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          } @else {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          }
+        </button>
+        <button class="icon-btn" (click)="toggleLanguage()" [attr.title]="'changeLanguage' | i18n">
+          <span class="lang-badge">{{ language === 'en' ? 'ES' : 'EN' }}</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12" [class.line1]="true"></line>
+        <line x1="3" y1="6" x2="21" y2="6" [class.line2]="true"></line>
+        <line x1="3" y1="18" x2="21" y2="18" [class.line3]="true"></line>
+      </svg>
+    </button>
+
+    <!-- Sidebar/Nav -->
+    <nav class="glass-panel sidebar animate-fade" [class.mobile-open]="isMobileMenuOpen">
+      <div class="logo">
+        <span class="logo-icon">J</span>
+        <span class="logo-text">JobQuest</span>
+      </div>
+
+      <div class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item"
+          (click)="closeMobileMenu()">
+          {{ 'dashboard' | i18n }}
+        </a>
+        <a routerLink="/board" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+          {{ 'kanbanBoard' | i18n }}
+        </a>
+      </div>
+
+      <button class="glass-button primary nav-add-btn" (click)="openAddModal()">
+        {{ 'newApplication' | i18n }}
+      </button>
+
+      <button class="logout-button" (click)="logout()">
+        {{ 'logout' | i18n }}
+      </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+    <!-- Main Content -->
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</ng-container>
+
+<ng-template #authLayout>
+  <main class="auth-layout">
+    <router-outlet></router-outlet>
+  </main>
+</ng-template>
+
+<!-- Footer (appears on all pages) -->
+<footer class="app-footer">
+  {{ 'footer' | i18n }}
+</footer>
+
+<!-- Modal -->
+<app-application-form></app-application-form>

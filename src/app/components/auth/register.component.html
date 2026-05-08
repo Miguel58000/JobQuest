@@ -1,0 +1,92 @@
+ <div class="auth-container">
+   <div class="auth-card glass-panel">
+     <div class="language-selector">
+       <button
+         type="button"
+         (click)="i18n.setLanguage('es')"
+         [class.active]="i18n.currentLanguage === 'es'"
+         class="lang-btn">
+         ES
+       </button>
+       <button
+         type="button"
+         (click)="i18n.setLanguage('en')"
+         [class.active]="i18n.currentLanguage === 'en'"
+         class="lang-btn">
+         EN
+       </button>
+     </div>
+
+     <h1>{{ 'registerTitle' | i18n }}</h1>
+
+     @if (errorKey) {
+       <div class="error-message">
+         {{ errorKey | i18n }}
+       </div>
+     }
+
+     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+       <div class="form-group">
+          <label for="name">{{ 'name' | i18n }} *</label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            [class.invalid]="submitted && form.get('name')?.invalid"
+            [placeholder]="'name' | i18n"
+          />
+          @if (submitted && form.get('name')?.hasError('required')) {
+            <span class="error-text">{{ 'nameRequired' | i18n }}</span>
+          }
+          @if (submitted && form.get('name')?.hasError('invalidCharacters')) {
+            <span class="error-text">{{ 'nameInvalidCharacters' | i18n }}</span>
+          }
+          @if (submitted && form.get('name')?.hasError('tooManySpaces')) {
+            <span class="error-text">{{ 'nameTooManySpaces' | i18n }}</span>
+          }
+       </div>
+
+       <div class="form-group">
+         <label for="email">{{ 'email' | i18n }}</label>
+         <input
+           type="email"
+           id="email"
+           formControlName="email"
+           [class.invalid]="submitted && form.get('email')?.invalid"
+           [placeholder]="'email' | i18n"
+         />
+         @if (submitted && form.get('email')?.hasError('required')) {
+           <span class="error-text">{{ 'emailRequired' | i18n }}</span>
+         }
+         @if (submitted && form.get('email')?.hasError('email')) {
+           <span class="error-text">{{ 'invalidEmail' | i18n }}</span>
+         }
+       </div>
+
+       <div class="form-group">
+         <label for="password">{{ 'password' | i18n }}</label>
+         <input
+           type="password"
+           id="password"
+           formControlName="password"
+           [class.invalid]="submitted && form.get('password')?.invalid"
+           [placeholder]="'password' | i18n"
+         />
+         @if (submitted && form.get('password')?.hasError('required')) {
+           <span class="error-text">{{ 'passwordRequired' | i18n }}</span>
+         }
+         @if (submitted && form.get('password')?.hasError('minlength')) {
+           <span class="error-text">{{ 'passwordMinLength' | i18n }}</span>
+         }
+       </div>
+
+      <button type="submit" class="auth-button primary" [disabled]="isSubmitting">
+        {{ 'registerButton' | i18n }}
+      </button>
+     </form>
+
+     <div class="auth-footer">
+       <p>{{ 'hasAccount' | i18n }} <a routerLink="/login">{{ 'switchToLogin' | i18n }}</a></p>
+     </div>
+   </div>
+ </div>

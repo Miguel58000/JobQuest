@@ -1,0 +1,69 @@
+ <div class="auth-container">
+   <div class="auth-card glass-panel">
+     <div class="language-selector">
+       <button
+         type="button"
+         (click)="i18n.setLanguage('es')"
+         [class.active]="i18n.currentLanguage === 'es'"
+         class="lang-btn">
+         ES
+       </button>
+       <button
+         type="button"
+         (click)="i18n.setLanguage('en')"
+         [class.active]="i18n.currentLanguage === 'en'"
+         class="lang-btn">
+         EN
+       </button>
+     </div>
+
+     <h1>{{ 'loginTitle' | i18n }}</h1>
+
+     @if (errorKey) {
+       <div class="error-message">
+         {{ errorKey | i18n }}
+       </div>
+     }
+
+     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+       <div class="form-group">
+         <label for="email">{{ 'email' | i18n }}</label>
+         <input
+           type="email"
+           id="email"
+           formControlName="email"
+           [class.invalid]="submitted && form.get('email')?.invalid"
+           [placeholder]="'email' | i18n"
+         />
+         @if (submitted && form.get('email')?.hasError('required')) {
+           <span class="error-text">{{ 'emailRequired' | i18n }}</span>
+         }
+         @if (submitted && form.get('email')?.hasError('email')) {
+           <span class="error-text">{{ 'invalidEmail' | i18n }}</span>
+         }
+       </div>
+
+       <div class="form-group">
+         <label for="password">{{ 'password' | i18n }}</label>
+         <input
+           type="password"
+           id="password"
+           formControlName="password"
+           [class.invalid]="submitted && form.get('password')?.invalid"
+           [placeholder]="'password' | i18n"
+         />
+         @if (submitted && form.get('password')?.hasError('required')) {
+           <span class="error-text">{{ 'passwordRequired' | i18n }}</span>
+         }
+       </div>
+
+      <button type="submit" class="auth-button primary" [disabled]="isSubmitting">
+        {{ 'loginButton' | i18n }}
+      </button>
+     </form>
+
+     <div class="auth-footer">
+       <p>{{ 'noAccount' | i18n }} <a routerLink="/register">{{ 'switchToRegister' | i18n }}</a></p>
+     </div>
+   </div>
+ </div>

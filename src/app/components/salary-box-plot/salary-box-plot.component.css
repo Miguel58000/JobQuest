@@ -1,0 +1,99 @@
+.box-plot-container {
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.plot-wrapper {
+  position: relative;
+  height: 140px;
+  margin: 1rem 0;
+}
+
+.baseline {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 0.5;
+}
+
+.box-plot-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.whisker-h {
+  stroke: var(--text-muted);
+  stroke-width: 0.5;
+  opacity: 0.5;
+}
+
+.whisker-cap {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.quartile-line {
+  stroke: var(--text-muted);
+  stroke-width: 0.75;
+  opacity: 0.6;
+}
+
+.box-rect {
+  fill: rgba(99, 102, 241, 0.25);
+  stroke: var(--primary);
+  stroke-width: 1;
+}
+
+.median-line {
+  stroke: var(--success);
+  stroke-width: 2;
+}
+
+.labels-row {
+  position: relative;
+  height: 40px;
+  margin-top: 0.5rem;
+}
+
+.label-item {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  font-size: 0.625rem;
+  color: var(--text-muted);
+}
+
+.label-item .label-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.label-min { color: var(--danger); }
+.label-max { color: var(--danger); }
+.label-q1 { color: var(--info); }
+.label-med { color: var(--success); }
+.label-q3 { color: var(--info); }
+
+.sample-size {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.hint {
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}

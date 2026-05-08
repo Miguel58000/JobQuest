@@ -1,0 +1,135 @@
+<div class="modal-overlay" *ngIf="isOpen()" (click)="closeModal()">
+  <div class="modal-container glass-panel" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2>{{ application ? ('editApplication' | i18n) : ('newApplicationTitle' | i18n) }}</h2>
+      <button class="close-btn" (click)="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="company">{{ 'company' | i18n }} *</label>
+          <input
+            type="text"
+            id="company"
+            formControlName="company"
+            [placeholder]="'companyPlaceholder' | i18n"
+            [class.invalid]="submitted && form.get('company')?.invalid"
+          />
+          @if (submitted && form.get('company')?.hasError('required')) {
+            <span class="error-msg">{{ 'required' | i18n:{ field: ('company' | i18n) } }}</span>
+          }
+          @if (submitted && form.get('company')?.hasError('minlength')) {
+            <span class="error-msg">{{ 'minLength' | i18n:{ min: 2 } }}</span>
+          }
+          @if (submitted && form.get('company')?.hasError('maxlength')) {
+            <span class="error-msg">{{ 'maxLength' | i18n:{ max: 100 } }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="position">{{ 'position' | i18n }} *</label>
+          <input
+            type="text"
+            id="position"
+            formControlName="position"
+            [placeholder]="'positionPlaceholder' | i18n"
+            [class.invalid]="submitted && form.get('position')?.invalid"
+          />
+          @if (submitted && form.get('position')?.hasError('required')) {
+            <span class="error-msg">{{ 'required' | i18n:{ field: ('position' | i18n) } }}</span>
+          }
+          @if (submitted && form.get('position')?.hasError('minlength')) {
+            <span class="error-msg">{{ 'minLength' | i18n:{ min: 2 } }}</span>
+          }
+          @if (submitted && form.get('position')?.hasError('maxlength')) {
+            <span class="error-msg">{{ 'maxLength' | i18n:{ max: 100 } }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'status' | i18n }}</label>
+          <div class="radio-group">
+            @for (status of statuses; track status) {
+              <label class="radio-option">
+                <input
+                  type="radio"
+                  formControlName="status"
+                  [value]="status"
+                />
+                <span>{{ i18n.translate(status) | titlecase }}</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'areas' | i18n }}</label>
+          <div class="areas-grid">
+            @for (area of availableAreas; track area.key) {
+              <label class="area-checkbox">
+                <input
+                  type="checkbox"
+                  [value]="area.key"
+                  (change)="onAreaChange($event, area.key)"
+                  [checked]="isAreaSelected(area.key)"
+                />
+                <span class="checkmark"></span>
+                {{ area.label }}
+              </label>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="salary">{{ 'salary' | i18n }}</label>
+          <input
+            type="text"
+            id="salary"
+            formControlName="salary"
+            [placeholder]="'salaryPlaceholder' | i18n"
+          />
+          @if (submitted && form.get('salary')?.hasError('pattern')) {
+            <span class="error-msg">{{ 'invalidSalaryFormat' | i18n }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="link">{{ 'link' | i18n }}</label>
+          <input
+            type="url"
+            id="link"
+            formControlName="link"
+            [placeholder]="'linkPlaceholder' | i18n"
+          />
+          @if (submitted && form.get('link')?.hasError('pattern')) {
+            <span class="error-msg">{{ 'invalidLinkFormat' | i18n }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="notes">{{ 'notes' | i18n }}</label>
+          <textarea
+            id="notes"
+            formControlName="notes"
+            rows="3"
+            [placeholder]="'notesPlaceholder' | i18n"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="glass-button" (click)="closeModal()">{{ 'cancel' | i18n }}</button>
+        <button type="submit" class="glass-button primary" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span class="spinner"></span>
+          } @else {
+            {{ application ? ('update' | i18n) : ('create' | i18n) }}
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
