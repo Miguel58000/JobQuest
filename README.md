@@ -176,7 +176,21 @@ npm run build:prod
 
 ## Estructura del Proyecto
 
-Mismo esquema que la versión en inglés arriba.
+
+```
+job-quest/
+├── src/                    # Frontend en Angular
+│   ├── app/
+│   │   ├── components/     # Componentes de UI
+│   │   ├── pages/          # Páginas de rutas
+│   │   ├── services/       # Lógica de negocio
+│   │   └── models/         # Interfaces de TypeScript
+│   └── environments/       # Archivos de configuración
+├── backend/                # API en Node.js
+│   ├── server.js           # Servidor Express
+│   └── package.json
+└── vercel.json             # Configuración de despliegue
+```
 
 ---
 ## Historial de Versiones
