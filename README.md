@@ -14,14 +14,6 @@
 
 ---
 
-## Demo | Demostración
-
-**Live Demo**: [jobquest.vercel.app](https://jobquest.vercel.app)
-
-![Dashboard Preview](https://jobquest.vercel.app/og-image.png)
-
----
-
 ## Tech Stack | Tecnologías
 
 | Frontend | Backend |
@@ -123,12 +115,6 @@ npm start
 
 ---
 
-## License | Licencia
-
-MIT © JobQuest
-
----
-
 # JobQuest - Seguimiento de Postulaciones Laborales
 
 > **Tablero visual para seguir tu búsqueda laboral. Monitorea postulaciones, entrevistas, ofertas y rechazos en un solo lugar.**
@@ -142,12 +128,6 @@ MIT © JobQuest
 - 🌓 **Modo Oscuro/Claro** - Tema adaptativo
 - 🌍 **Multi-idioma** - Soporte en inglés y español
 - 📤 **Exportar Datos** - Exporta a CSV
-
----
-
-## Demostración
-
-**Demo en Vivo**: [jobquest.vercel.app](https://jobquest.vercel.app)
 
 ---
 
