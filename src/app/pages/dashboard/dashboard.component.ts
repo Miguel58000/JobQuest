@@ -32,16 +32,43 @@ export class DashboardComponent {
 
   areaBreakdown = computed(() => {
     const areaStats = this.appService.areaStats();
-    const total = this.stats().total;
+    const totalAreas = areaStats.reduce((sum, a) => sum + a.count, 0);
+
+    if (totalAreas === 0) return [];
+
     const colors = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316', '#ec4899'];
 
-    return areaStats.slice(0, 8).map((area, index) => ({
-      area: area.area,
-      label: this.getTranslatedAreaLabel(area.area),
-      count: area.count,
-      percentage: Math.round((area.count / (total || 1)) * 100),
-      color: colors[index % colors.length]
-    }));
+    // Normalize percentages to always sum to 100%
+    let accumulated = 0;
+    const result = areaStats.slice(0, 8).map((area, index, arr) => {
+      const rawPercentage = (area.count / totalAreas) * 100;
+      const isLast = index === arr.length - 1 || index === 7; // Last item or last of top 8
+
+      if (isLast) {
+        // Ensure last item gets remaining percentage to sum exactly 100%
+        const percentage = 100 - accumulated;
+        accumulated = 100;
+        return {
+          area: area.area,
+          label: this.getTranslatedAreaLabel(area.area),
+          count: area.count,
+          percentage,
+          color: colors[index % colors.length]
+        };
+      } else {
+        const percentage = Math.round(rawPercentage);
+        accumulated += percentage;
+        return {
+          area: area.area,
+          label: this.getTranslatedAreaLabel(area.area),
+          count: area.count,
+          percentage,
+          color: colors[index % colors.length]
+        };
+      }
+    });
+
+    return result;
   });
 
   salaryStats = computed(() => this.appService.getSalaryStats());

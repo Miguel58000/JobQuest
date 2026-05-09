@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApplicationService } from './services/application.service';
 import { ThemeService } from './services/theme.service';
-import { I18nService } from './services/i18n.service';
+import { I18nService, Language } from './services/i18n.service';
 import { AuthService } from './services/auth.service';
 import { ApplicationFormComponent } from './components/application-form/application-form.component';
 import { I18nPipe } from './pipes/i18n.pipe';
@@ -22,7 +22,7 @@ export class App implements OnInit {
   public authService = inject(AuthService);
   private router = inject(Router);
 
-  get language(): string {
+  get language(): Language {
     return this.i18nService.currentLanguage;
   }
 

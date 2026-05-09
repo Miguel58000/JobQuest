@@ -99,7 +99,7 @@ const translations = {
     passwordRequired: 'Password is required',
     invalidEmail: 'Invalid email format',
     // Footer
-    footer: 'Developed by Miguel Rodríguez - 2026 - v1.1.0 - All rights reserved',
+    footer: 'Developed by Miguel Rodríguez - 2026 - v1.2.0 - All rights reserved',
   },
   es: {
     dashboard: 'Panel',
@@ -197,7 +197,7 @@ const translations = {
     passwordRequired: 'La contraseña es requerida',
     invalidEmail: 'Formato de correo inválido',
     // Footer
-    footer: 'Desarrollado por Miguel Rodríguez - 2026 - v1.1.0 - Todos los derechos reservados',
+    footer: 'Desarrollado por Miguel Rodríguez - 2026 - v1.2.0 - Todos los derechos reservados',
   }
 };
 

@@ -34,16 +34,26 @@ export class ApplicationFormComponent {
       areas: [[] as string[]],
       salary: ['', Validators.pattern(/^\$(\d{1,3}(,\d{3})*|\d+)(\.\d+)?([kK])?$/)],
       link: ['', Validators.pattern(/^https?:\/\/\S+$/)],
-      notes: ['']
+      notes: [''],
+      dateApplied: ['', Validators.required]
     });
     
     effect(() => {
       if (this.isOpenSignal() && this.application) {
-        this.form.patchValue(this.application);
+        const formValue = {
+          ...this.application,
+          dateApplied: this.application.dateApplied ? this.formatDateForInput(this.application.dateApplied) : ''
+        };
+        this.form.patchValue(formValue);
       } else if (this.isOpenSignal()) {
-        this.form.reset({ status: 'applied', areas: [] });
+        const today = new Date().toISOString().split('T')[0];
+        this.form.reset({ status: 'applied', areas: [], dateApplied: today });
       }
     });
+  }
+
+  private formatDateForInput(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
   
   open() {

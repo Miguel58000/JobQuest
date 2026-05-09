@@ -1,9 +1,10 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Application, ApplicationStatus } from '../models/application.model';
 import { AuthService } from './auth.service';
+import { I18nService } from './i18n.service';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -11,6 +12,7 @@ import { environment } from '../../environments/environment';
 })
 export class ApplicationService {
   private readonly STORAGE_KEY = 'jobquest_applications';
+  private i18nService = inject(I18nService);
 
   private applicationsSignal = signal<Application[]>([]);
   private editingAppSignal = signal<Application | null>(null);
@@ -43,9 +45,30 @@ export class ApplicationService {
   }
 
   private fetchApplications() {
-    return this.http.get<Application[]>(`${environment.apiUrl}/applications`, {
+    return this.http.get<any[]>(`${environment.apiUrl}/applications`, {
       headers: this.getHeaders()
-    }).pipe(catchError(this.handleError));
+    }).pipe(
+      map(apps => apps.map(app => ({
+        ...app,
+        dateApplied: this.parseDate(app.dateApplied)
+      }))),
+      catchError(this.handleError)
+    );
+  }
+
+  private parseDate(dateStr: string): Date {
+    if (!dateStr) return new Date();
+    // Handle YYYY-MM-DD format from backend
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+    if (match) {
+      const year = parseInt(match[1], 10);
+      const month = parseInt(match[2], 10) - 1;
+      const day = parseInt(match[3], 10);
+      return new Date(year, month, day);
+    }
+    // Fallback to Date constructor
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? new Date() : d;
   }
 
   readonly allApplications = computed(() => this.applicationsSignal());
@@ -213,14 +236,47 @@ export class ApplicationService {
     const data = this.userApplications();
     if (data.length === 0) return;
 
-    const headers = ['Company', 'Position', 'Status', 'Areas', 'Salary', 'Date Applied', 'Notes', 'Link'];
+    const lang = this.i18nService.currentLanguage;
+    const t = (key: string) => this.i18nService.translate(key);
+
+    // Translate headers based on current language
+    const headers = [
+      t('company'),
+      t('position'),
+      t('status'),
+      t('areas'),
+      t('salary'),
+      t('dateApplied'),
+      t('notes'),
+      t('link')
+    ];
+
+    // Map area names to translation keys
+    const areaKeyMap: Record<string, string> = {
+      'Frontend': 'areaFrontend',
+      'Backend': 'areaBackend',
+      'Full Stack': 'areaFullStack',
+      'Mobile': 'areaMobile',
+      'Data Science': 'areaDataScience',
+      'DevOps': 'areaDevOps',
+      'Cloud': 'areaCloud',
+      'AI/ML': 'areaAIML',
+      'Cybersecurity': 'areaCybersecurity',
+      'QA/Testing': 'areaQATesting',
+      'UI/UX': 'areaUIUX',
+      'Product Management': 'areaProductManagement',
+      'IT Support': 'areaITSupport',
+      'Database': 'areaDatabase',
+      'API Development': 'areaAPIDevelopment'
+    };
+
     const rows = data.map(app => [
       `"${app.company}"`,
       `"${app.position}"`,
-      app.status,
-      `"${app.areas.join(', ')}"`,
+      t(app.status as ApplicationStatus),
+      `"${app.areas.map(area => t(areaKeyMap[area] || area)).join(', ')}"`,
       `"${app.salary || ''}"`,
-      new Date(app.dateApplied).toLocaleDateString(),
+      new Date(app.dateApplied).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US'),
       `"${app.notes || ''}"`,
       `"${app.link || ''}"`
     ]);

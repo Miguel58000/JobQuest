@@ -15,9 +15,10 @@
   padding: 1rem 1.5rem;
   background: rgba(255, 255, 255, 0.02);
   margin-bottom: 1.5rem;
-  /* Añadido para crear espacio debajo del encabezado */
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-glass);
+  position: relative;
+  z-index: 1000;
 }
 
 .user-greeting {
@@ -258,10 +259,12 @@
     z-index: 999;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 
   .mobile-overlay.active {
     opacity: 1;
+    pointer-events: auto;
   }
 
   .app-footer {

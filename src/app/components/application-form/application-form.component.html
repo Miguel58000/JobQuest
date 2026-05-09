@@ -84,6 +84,19 @@
         </div>
 
         <div class="form-group">
+          <label for="dateApplied">{{ 'dateApplied' | i18n }} *</label>
+          <input
+            type="date"
+            id="dateApplied"
+            formControlName="dateApplied"
+            [class.invalid]="submitted && form.get('dateApplied')?.invalid"
+          />
+          @if (submitted && form.get('dateApplied')?.hasError('required')) {
+            <span class="error-msg">{{ 'required' | i18n:{ field: ('dateApplied' | i18n) } }}</span>
+          }
+        </div>
+
+        <div class="form-group">
           <label for="salary">{{ 'salary' | i18n }}</label>
           <input
             type="text"
