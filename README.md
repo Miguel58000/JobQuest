@@ -33,6 +33,7 @@ Your app is a fully static SPA that connects directly to Firebase.
 5. Deploy!
 
 ### Version History
+- **[1.4.1] (2026-05-10)** - Mobile UI enhancements: expanded form sizes for better readability and touch targets.
 - **[1.4.0] (2026-05-10)** - Added Smart Loading Screen for Firebase Auth state transitions, improved UX and fixed route race conditions.
 - **[1.3.0] (2026-05-10)** - Complete Serverless migration. Replaced Node.js backend with Firebase Auth + Firestore.
 - **[1.2.0]** - Multi-language CSV Export & Date Field.
@@ -69,6 +70,7 @@ Tu aplicación es una SPA estática que se conecta directamente a Firebase.
 5. ¡Desplegar!
 
 ### Historial de Versiones
+- **[1.4.1] (2026-05-10)** - Mejoras de UI en móvil: se amplió el tamaño de los formularios para mejor legibilidad y usabilidad.
 - **[1.4.0] (2026-05-10)** - Pantalla de carga inteligente para transiciones de Firebase Auth, UX mejorada y corrección de bloqueos de rutas.
 - **[1.3.0] (2026-05-10)** - Migración completa a Serverless. Se reemplazó el backend en Node.js por Firebase Auth + Firestore.
 - **[1.2.0]** - Exportación CSV Multi-idioma y campo de Fecha.

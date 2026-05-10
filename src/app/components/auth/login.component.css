@@ -161,12 +161,14 @@
 }
 
 @media (max-width: 768px) {
+  .auth-container {
+    padding: 0.75rem;
+  }
+
   .auth-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
     width: 100%;
-    /* En pantallas pequeñas, ocupa todo el ancho */
     max-width: none;
-    /* Elimina la restricción de ancho máximo en pantallas pequeñas */
   }
 
   .auth-card h1 {
