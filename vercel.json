@@ -6,7 +6,7 @@
       "use": "@vercel/static-build",
       "config": {
         "buildCommand": "npm run build:prod",
-        "outputDirectory": "dist/job-quest"
+        "outputDirectory": "dist/job-quest/browser"
       }
     }
   ],

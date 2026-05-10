@@ -29,7 +29,8 @@ Your app is a fully static SPA that connects directly to Firebase.
 1. Push your code to GitHub
 2. Go to [Vercel](https://vercel.com) → New Project → Import your repository
 3. **No environment variables needed**
-4. Deploy!
+4. Check that Output Directory is `dist/job-quest/browser`
+5. Deploy!
 
 ### Version History
 - **[1.4.0] (2026-05-10)** - Added Smart Loading Screen for Firebase Auth state transitions, improved UX and fixed route race conditions.
@@ -64,7 +65,8 @@ Tu aplicación es una SPA estática que se conecta directamente a Firebase.
 1. Sube tu código a GitHub
 2. Ve a [Vercel](https://vercel.com) → New Project → Importa tu repositorio
 3. **No se necesitan variables de entorno** en el panel de Vercel.
-4. ¡Desplegar!
+4. Verifica que el Output Directory sea `dist/job-quest/browser`
+5. ¡Desplegar!
 
 ### Historial de Versiones
 - **[1.4.0] (2026-05-10)** - Pantalla de carga inteligente para transiciones de Firebase Auth, UX mejorada y corrección de bloqueos de rutas.
