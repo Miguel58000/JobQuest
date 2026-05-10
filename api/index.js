@@ -20,11 +20,11 @@ if (process.env.DATABASE_URL) {
   isPG = true;
   db = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    ssl: { rejectUnauthorized: false }
   });
-
-  db.query(`CREATE TABLE IF NOT EXISTS users (id UUID PRIMARY KEY, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, name TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`).catch(() => {});
-  db.query(`CREATE TABLE IF NOT EXISTS applications (id UUID PRIMARY KEY, user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE, company TEXT NOT NULL, position TEXT NOT NULL, status TEXT NOT NULL, areas JSONB DEFAULT '[]', salary TEXT, link TEXT, notes TEXT, date_applied DATE DEFAULT CURRENT_DATE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`).catch(() => {});
+  db.on('error', (err) => console.error('Database pool error:', err));
+  db.query(`CREATE TABLE IF NOT EXISTS users (id UUID PRIMARY KEY, email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, name TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`).catch(err => console.error('Users table error:', err));
+  db.query(`CREATE TABLE IF NOT EXISTS applications (id UUID PRIMARY KEY, user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE, company TEXT NOT NULL, position TEXT NOT NULL, status TEXT NOT NULL, areas JSONB DEFAULT '[]', salary TEXT, link TEXT, notes TEXT, date_applied DATE DEFAULT CURRENT_DATE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`).catch(err => console.error('Applications table error:', err));
 } else {
   const sqlite3 = require('sqlite3').verbose();
   const rawDb = new sqlite3.Database('./backend/jobquest.db');
@@ -68,9 +68,9 @@ app.post('/api/auth/register', function(req, res) {
         .then(() => {
           const token = jwt.sign({ id: userId, email }, JWT_SECRET || 'fallback-secret', { expiresIn: '7d' });
           res.status(201).json({ user: { id: userId, email, name }, token });
-        }).catch(() => res.status(500).json({ error: 'Failed to create user' }));
+        }).catch(err => { console.error('Insert user error:', err); res.status(500).json({ error: 'Failed to create user' }); });
     });
-  }).catch(() => res.status(500).json({ error: 'Database error' }));
+  }).catch(err => { console.error('Check user error:', err); res.status(500).json({ error: 'Database error' }); });
 });
 
 app.post('/api/auth/login', async function(req, res) {
@@ -78,20 +78,20 @@ app.post('/api/auth/login', async function(req, res) {
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
   try {
     const result = await q('SELECT * FROM users WHERE email = $1', [email]);
-    const user = isPG ? result.rows[0] : result.rows[0];
+    const user = result.rows[0];
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
     if (!user.password) return res.status(500).json({ error: 'Server error: user data incomplete' });
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(401).json({ error: 'Invalid credentials' });
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET || 'fallback-secret', { expiresIn: '7d' });
     res.json({ user: { id: user.id, email: user.email, name: user.name }, token });
-  } catch (e) { res.status(500).json({ error: 'Server error' }); }
+  } catch (e) { console.error('Login error:', e); res.status(500).json({ error: 'Server error' }); }
 });
 
 app.get('/api/auth/me', authenticateToken, function(req, res) {
   q('SELECT id, email, name FROM users WHERE id = $1', [req.user.id])
-    .then(result => { const user = isPG ? result.rows[0] : result.rows[0]; if (!user) return res.status(404).json({ error: 'User not found' }); res.json({ user }); })
-    .catch(() => res.status(500).json({ error: 'Database error' }));
+    .then(result => { const user = result.rows[0]; if (!user) return res.status(404).json({ error: 'User not found' }); res.json({ user }); })
+    .catch(err => { console.error('Get user error:', err); res.status(500).json({ error: 'Database error' }); });
 });
 
 app.get('/api/applications', authenticateToken, function(req, res) {
@@ -99,7 +99,7 @@ app.get('/api/applications', authenticateToken, function(req, res) {
     .then(result => {
       const apps = result.rows.map(app => ({ id: app.id, userId: app.user_id, company: app.company, position: app.position, status: app.status, areas: app.areas ? (typeof app.areas === 'string' ? JSON.parse(app.areas) : app.areas) : [], salary: app.salary, link: app.link, notes: app.notes, dateApplied: app.date_applied }));
       res.json(apps);
-    }).catch(() => res.status(500).json({ error: 'Database error' }));
+    }).catch(err => { console.error('Get apps error:', err); res.status(500).json({ error: 'Database error' }); });
 });
 
 app.post('/api/applications', authenticateToken, function(req, res) {
@@ -109,7 +109,7 @@ app.post('/api/applications', authenticateToken, function(req, res) {
   const areasJson = JSON.stringify(areas || []);
   r('INSERT INTO applications (id, user_id, company, position, status, areas, salary, link, notes, date_applied) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [appId, req.user.id, company, position, status, areasJson, salary || null, link || null, notes || null, dateApplied || null])
     .then(() => res.status(201).json({ id: appId, userId: req.user.id, company, position, status, areas: areas || [], salary, link, notes, dateApplied }))
-    .catch(() => res.status(500).json({ error: 'Failed to create application' }));
+    .catch(err => { console.error('Insert app error:', err); res.status(500).json({ error: 'Failed to create application' }); });
 });
 
 app.put('/api/applications/:id', authenticateToken, function(req, res) {
@@ -118,14 +118,14 @@ app.put('/api/applications/:id', authenticateToken, function(req, res) {
   if (!company || !position || !status) return res.status(400).json({ error: 'Company, position, and status are required' });
   const areasJson = JSON.stringify(areas || []);
   r('UPDATE applications SET company=$1, position=$2, status=$3, areas=$4, salary=$5, link=$6, notes=$7, date_applied=$8 WHERE id=$9 AND user_id=$10', [company, position, status, areasJson, salary || null, link || null, notes || null, dateApplied || null, id, req.user.id])
-    .then(result => { if (!isPG && result.changes === 0) return res.status(404).json({ error: 'Application not found' }); if (isPG && result.rowCount === 0) return res.status(404).json({ error: 'Application not found' }); res.json({ id, userId: req.user.id, company, position, status, areas: areas || [], salary, link, notes, dateApplied }); })
-    .catch(() => res.status(500).json({ error: 'Failed to update' }));
+    .then(result => { if (result.rowCount === 0) return res.status(404).json({ error: 'Application not found' }); res.json({ id, userId: req.user.id, company, position, status, areas: areas || [], salary, link, notes, dateApplied }); })
+    .catch(err => { console.error('Update app error:', err); res.status(500).json({ error: 'Failed to update' }); });
 });
 
 app.delete('/api/applications/:id', authenticateToken, function(req, res) {
   r('DELETE FROM applications WHERE id=$1 AND user_id=$2', [req.params.id, req.user.id])
-    .then(result => { if (!isPG && result.changes === 0) return res.status(404).json({ error: 'Application not found' }); if (isPG && result.rowCount === 0) return res.status(404).json({ error: 'Application not found' }); res.json({ message: 'Application deleted successfully' }); })
-    .catch(() => res.status(500).json({ error: 'Failed to delete' }));
+    .then(result => { if (result.rowCount === 0) return res.status(404).json({ error: 'Application not found' }); res.json({ message: 'Application deleted successfully' }); })
+    .catch(err => { console.error('Delete app error:', err); res.status(500).json({ error: 'Failed to delete' }); });
 });
 
 module.exports = app;
