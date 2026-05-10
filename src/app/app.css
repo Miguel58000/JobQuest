@@ -281,3 +281,35 @@
   justify-content: center;
   padding: 1rem;
 }
+
+/* Loading Screen */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-dark);
+  z-index: 9999;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid rgba(99, 102, 241, 0.2);
+  border-bottom-color: var(--primary);
+  border-radius: 50%;
+  animation: rotation 1s linear infinite;
+}
+
+[data-theme="light"] .loading-screen {
+  background-color: #f8fafc;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

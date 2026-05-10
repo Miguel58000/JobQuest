@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -18,6 +18,7 @@ export class RegisterComponent implements OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
   public i18n = inject(I18nService);
+  private cdr = inject(ChangeDetectorRef);
 
   private fullNameValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
@@ -75,8 +76,10 @@ export class RegisterComponent implements OnDestroy {
       this.errorTimeoutId = setTimeout(() => {
         this.errorKey = null;
         this.errorTimeoutId = null;
+        this.cdr.detectChanges();
       }, 5000);
       this.isSubmitting = false;
+      this.cdr.detectChanges();
     }
   }
 

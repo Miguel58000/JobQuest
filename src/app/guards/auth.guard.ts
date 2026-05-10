@@ -9,7 +9,8 @@ import { computed } from '@angular/core';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): boolean | UrlTree {
+  async canActivate(): Promise<boolean | UrlTree> {
+    await this.authService.waitForAuth();
     const isAuth = this.authService.isAuthenticated();
     return isAuth ? true : this.router.createUrlTree(['/login']);
   }

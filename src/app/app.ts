@@ -31,6 +31,7 @@ export class App implements OnInit {
   }
 
   readonly isAuthenticated = computed(() => this.authService.isAuthenticated());
+  readonly isInitializing = computed(() => this.authService.isInitializing());
   readonly userName = computed(() => this.authService.getCurrentUser()?.name || '');
 
   isMobileMenuOpen = false;

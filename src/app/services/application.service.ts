@@ -93,10 +93,12 @@ export class ApplicationService {
 
   requestEdit(app: Application) {
     this.editingAppSignal.set(app);
+    window.dispatchEvent(new CustomEvent('openModal'));
   }
 
   requestCreate() {
     this.editingAppSignal.set(null);
+    window.dispatchEvent(new CustomEvent('openModal'));
   }
 
   clearEditState() {

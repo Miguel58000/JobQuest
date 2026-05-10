@@ -1,3 +1,9 @@
+@if (isInitializing()) {
+  <div class="loading-screen animate-fade">
+    <div class="loader"></div>
+  </div>
+}
+
 <ng-container *ngIf="isAuthenticated(); else authLayout">
   <div class="app-container">
     <!-- Header -->
