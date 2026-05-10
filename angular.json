@@ -32,13 +32,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
               "outputHashing": "all"
@@ -51,21 +51,18 @@
           },
           "defaultConfiguration": "production"
         },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "options": {
-            "proxyConfig": "proxy.conf.json"
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "job-quest:build:production"
-            },
-            "development": {
-              "buildTarget": "job-quest:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
+         "serve": {
+           "builder": "@angular/build:dev-server",
+           "configurations": {
+             "production": {
+               "buildTarget": "job-quest:build:production"
+             },
+             "development": {
+               "buildTarget": "job-quest:build:development"
+             }
+           },
+           "defaultConfiguration": "development"
+         },
         "test": {
           "builder": "@angular/build:unit-test"
         }

@@ -19,12 +19,10 @@ export class RegisterComponent implements OnDestroy {
   private router = inject(Router);
   public i18n = inject(I18nService);
 
-  // Validación personalizada para nombre completo (letras + máximo 3 espacios)
   private fullNameValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
 
-    // Solo letras, espacios, y máximo 3 espacios
     const regex = /^[a-zA-ZÀ-ÿ\s]+$/;
     const spaces = (value.match(/\s/g) || []).length;
 
@@ -57,7 +55,7 @@ export class RegisterComponent implements OnDestroy {
     }
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     this.submitted = true;
     if (this.form.invalid || this.isSubmitting) return;
 
@@ -68,20 +66,18 @@ export class RegisterComponent implements OnDestroy {
     const formValue = this.form.getRawValue() as { name?: string; email: string; password: string };
     const { name, email, password } = formValue;
 
-    this.authService.register(email, password, name).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error('Register error:', error);
-        this.errorKey = 'emailAlreadyExists';
-        this.errorTimeoutId = setTimeout(() => {
-          this.errorKey = null;
-          this.errorTimeoutId = null;
-        }, 5000);
-        this.isSubmitting = false;
-      }
-    });
+    try {
+      await this.authService.register(email, password, name);
+      this.router.navigate(['/']);
+    } catch (error) {
+      console.error('Register error:', error);
+      this.errorKey = 'emailAlreadyExists';
+      this.errorTimeoutId = setTimeout(() => {
+        this.errorKey = null;
+        this.errorTimeoutId = null;
+      }, 5000);
+      this.isSubmitting = false;
+    }
   }
 
   ngOnDestroy(): void {

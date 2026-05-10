@@ -6,17 +6,12 @@
       "use": "@vercel/static-build",
       "config": {
         "buildCommand": "npm run build:prod",
-        "outputDirectory": "dist/job-quest/browser"
+        "outputDirectory": "dist/job-quest"
       }
-    },
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/api/(.*)", "dest": "/api/index.js" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

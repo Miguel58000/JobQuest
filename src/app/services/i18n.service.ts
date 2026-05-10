@@ -198,8 +198,8 @@ const translations = {
     passwordRequired: 'La contraseña es requerida',
     invalidEmail: 'Formato de correo inválido',
     passwordMinLength: 'La contraseña debe tener al menos 6 caracteres',
-    // Footer
-    footer: 'Desarrollado por Miguel Rodríguez - 2026 - v1.2.0 - Todos los derechos reservados',
+     // Footer
+     footer: 'Desarrollado por Miguel Rodríguez - 2026 - v1.3.0 - Todos los derechos reservados',
   }
 };
 

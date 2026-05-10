@@ -36,7 +36,7 @@ export class LoginComponent implements OnDestroy {
     }
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     this.submitted = true;
     if (this.isSubmitting) return;
 
@@ -47,20 +47,18 @@ export class LoginComponent implements OnDestroy {
     const formValue = this.form.getRawValue() as { email: string; password: string };
     const { email, password } = formValue;
 
-    this.authService.login(email, password).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error('Login error:', error);
-        this.errorKey = 'invalidCredentials';
-        this.errorTimeoutId = setTimeout(() => {
-          this.errorKey = null;
-          this.errorTimeoutId = null;
-        }, 5000);
-        this.isSubmitting = false;
-      }
-    });
+    try {
+      await this.authService.login(email, password);
+      this.router.navigate(['/']);
+    } catch (error) {
+      console.error('Login error:', error);
+      this.errorKey = 'invalidCredentials';
+      this.errorTimeoutId = setTimeout(() => {
+        this.errorKey = null;
+        this.errorTimeoutId = null;
+      }, 5000);
+      this.isSubmitting = false;
+    }
   }
 
   ngOnDestroy(): void {

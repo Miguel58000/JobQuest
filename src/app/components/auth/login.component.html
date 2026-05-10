@@ -29,7 +29,7 @@
         <div class="loading-bar" *ngIf="isSubmitting"></div>
         
         <div class="form-group">
-         <label for="email">{{ 'email' | i18n }}</label>
+         <label for="email">{{ 'email' | i18n }} *</label>
          <input
            type="email"
            id="email"
@@ -45,8 +45,8 @@
          }
        </div>
 
-       <div class="form-group">
-         <label for="password">{{ 'password' | i18n }}</label>
+        <div class="form-group">
+          <label for="password">{{ 'password' | i18n }} *</label>
          <input
            type="password"
            id="password"
