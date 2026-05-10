@@ -49,7 +49,7 @@ Firebase credentials are stored in:
 - `src/environments/environment.ts` (development)
 - `src/environments/environment.prod.ts` (production)
 
-⚠️ **Security Note**: For production, consider using [Firebase App Check](https://firebase.google.com/docs/app-check) to protect your Firestore from abuse. You can also move credentials to environment variables in Vercel if needed.
+
 
 ---
 
@@ -242,12 +242,6 @@ This project uses the new **signals** API from Angular for state management:
 - `signal()` for reactive state
 - `computed()` for derived values
 - `effect()` for side effects (sync with localStorage)
-
----
-
-## License
-
-MIT License - Desarrollado por Miguel Rodríguez © 2026
 
 ---
 
