@@ -98,6 +98,7 @@ const translations = {
     emailRequired: 'Email is required',
     passwordRequired: 'Password is required',
     invalidEmail: 'Invalid email format',
+    passwordMinLength: 'Password must be at least 6 characters',
     // Footer
     footer: 'Developed by Miguel Rodríguez - 2026 - v1.2.0 - All rights reserved',
   },
@@ -196,6 +197,7 @@ const translations = {
     emailRequired: 'El correo es requerido',
     passwordRequired: 'La contraseña es requerida',
     invalidEmail: 'Formato de correo inválido',
+    passwordMinLength: 'La contraseña debe tener al menos 6 caracteres',
     // Footer
     footer: 'Desarrollado por Miguel Rodríguez - 2026 - v1.2.0 - Todos los derechos reservados',
   }

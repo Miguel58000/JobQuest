@@ -128,5 +128,11 @@ app.delete('/api/applications/:id', authenticateToken, function(req, res) {
     .catch(err => { console.error('Delete app error:', err); res.status(500).json({ error: 'Failed to delete' }); });
 });
 
+app.get('/api/test', function(req, res) {
+  if (!isPG) return res.json({ status: 'SQLite mode', tables: 'using local db' });
+  db.query('SELECT 1 as test').then(r => res.json({ status: 'connected', result: r.rows }))
+    .catch(e => res.status(500).json({ status: 'error', error: e.message }));
+});
+
 module.exports = app;
 if (process.env.NODE_ENV !== 'production') { app.listen(3000, () => console.log('API running on port 3000')); }
