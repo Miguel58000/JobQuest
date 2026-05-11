@@ -181,6 +181,7 @@
 
 .content-area {
   overflow-y: auto;
+  min-width: 0;
 }
 
 .mobile-overlay {
@@ -218,10 +219,11 @@
   .app-container {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
+    padding: 0;
   }
 
   .app-header {
-    padding: 1rem;
+    padding: 0.875rem 1rem;
   }
 
   .header-left {
@@ -267,8 +269,26 @@
     pointer-events: auto;
   }
 
+  .content-area {
+    padding: 1rem;
+  }
+
   .app-footer {
     margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0;
+  }
+
+  .app-header {
+    padding: 0.75rem;
+  }
+
+  .content-area {
+    padding: 0.75rem;
   }
 }
 

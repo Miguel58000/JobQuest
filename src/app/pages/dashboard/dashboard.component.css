@@ -1,5 +1,5 @@
 .dashboard-container {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .header {
@@ -262,11 +262,42 @@ h1 {
 }
 
 @media (max-width: 768px) {
+  .dashboard-container {
+    padding: 0;
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .percentages-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .percentages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .percentage-card {
+    padding: 1rem 0.75rem;
+  }
+
+  .percentage-ring {
+    width: 70px;
+    height: 70px;
+  }
+
+  h1 {
+    font-size: 1.25rem;
   }
 }
