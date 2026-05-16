@@ -57,13 +57,9 @@ graph TD
 - **Real-time Sync**: Uses Firestore `onSnapshot` to ensure the Dashboard and Kanban board are always in sync across devices without manual refreshes.
 - **Decoupled Business Logic**: All Firestore interactions and data mapping (like converting Timestamps to Dates) are encapsulated within the `ApplicationService`.
 
-### 🚀 Deployment (Vercel)
-Your app is a fully static SPA that connects directly to Firebase.
-1. Push your code to GitHub
-2. Go to [Vercel](https://vercel.com) → New Project → Import your repository
-3. **No environment variables needed**
-4. Check that Output Directory is `dist/job-quest/browser`
-5. Deploy!
+### 🚀 Deployment 
+Your app is a fully static SPA that connects directly to Firebase and is deployed in Vercel.
+
 
 ### Version History
 - **[1.5.0] (2026-05-16)** - Added comprehensive Architecture & Design documentation with Mermaid diagrams.
@@ -128,13 +124,9 @@ graph TD
 - **Sincronización Live**: Implementación de `onSnapshot` de Firestore para garantizar que el Dashboard y el Kanban estén siempre actualizados.
 - **Lógica Desacoplada**: Todas las interacciones con la base de datos y el mapeo de modelos están encapsulados en servicios, manteniendo los componentes limpios y enfocados en la UI.
 
-### 🚀 Despliegue (Vercel)
-Tu aplicación es una SPA estática que se conecta directamente a Firebase.
-1. Sube tu código a GitHub
-2. Ve a [Vercel](https://vercel.com) → New Project → Importa tu repositorio
-3. **No se necesitan variables de entorno** en el panel de Vercel.
-4. Verifica que el Output Directory sea `dist/job-quest/browser`
-5. ¡Desplegar!
+### 🚀 Despliegue 
+Esta aplicación es una SPA estática que se conecta directamente a Firebase yy está desplegada en Vercel.
+
 
 ### Historial de Versiones
 - **[1.5.0] (2026-05-16)** - Se añadió documentación completa de Arquitectura y Diseño con diagramas Mermaid.
