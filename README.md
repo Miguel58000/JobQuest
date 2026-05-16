@@ -23,8 +23,41 @@
 | **Frontend** | Angular 21, TypeScript, RxJS, Lucide Icons |
 | **Backend & DB** | Firebase Auth + Cloud Firestore (NoSQL) |
 | **Deployment** | Vercel (static frontend) |
+| **Icons** | Lucide Icons |
 
-### Deployment (Vercel)
+### 🏗️ Architecture & Design
+
+The project follows a **Serverless SPA** architecture, prioritizing real-time reactivity and maintainability.
+
+#### System Overview
+```mermaid
+graph TD
+    User((User))
+    
+    subgraph "Frontend (Angular 21)"
+        UI[UI Components]
+        State[State Management - Signals]
+        Service[ApplicationService]
+    end
+    
+    subgraph "Backend (Firebase)"
+        Auth[Firebase Auth]
+        Store[(Cloud Firestore)]
+    end
+    
+    User <--> UI
+    UI <--> State
+    State <--> Service
+    Service <--> Auth
+    Service <--> Store
+```
+
+#### Key Design Decisions
+- **Signals-based Reactivity**: Leverages Angular Signals for fine-grained UI updates, reducing overhead compared to traditional RxJS Observables for component state.
+- **Real-time Sync**: Uses Firestore `onSnapshot` to ensure the Dashboard and Kanban board are always in sync across devices without manual refreshes.
+- **Decoupled Business Logic**: All Firestore interactions and data mapping (like converting Timestamps to Dates) are encapsulated within the `ApplicationService`.
+
+### 🚀 Deployment (Vercel)
 Your app is a fully static SPA that connects directly to Firebase.
 1. Push your code to GitHub
 2. Go to [Vercel](https://vercel.com) → New Project → Import your repository
@@ -33,6 +66,7 @@ Your app is a fully static SPA that connects directly to Firebase.
 5. Deploy!
 
 ### Version History
+- **[1.5.0] (2026-05-16)** - Added comprehensive Architecture & Design documentation with Mermaid diagrams.
 - **[1.4.1] (2026-05-10)** - Mobile UI enhancements: expanded form sizes for better readability and touch targets.
 - **[1.4.0] (2026-05-10)** - Added Smart Loading Screen for Firebase Auth state transitions, improved UX and fixed route race conditions.
 - **[1.3.0] (2026-05-10)** - Complete Serverless migration. Replaced Node.js backend with Firebase Auth + Firestore.
@@ -60,8 +94,34 @@ Your app is a fully static SPA that connects directly to Firebase.
 | **Frontend** | Angular 21, TypeScript, RxJS, Lucide Icons |
 | **Backend y BD** | Firebase Auth + Cloud Firestore (NoSQL) |
 | **Despliegue** | Vercel (frontend estático) |
+| **Iconos** | Lucide Icons |
 
-### Despliegue (Vercel)
+### 🏗️ Arquitectura y Diseño
+
+El proyecto sigue una arquitectura de **SPA Serverless**, priorizando la reactividad en tiempo real y la facilidad de mantenimiento.
+
+#### Flujo de Datos
+```mermaid
+sequenceDiagram
+    participant UI as Componente (Signal)
+    participant Svc as ApplicationService
+    participant DB as Cloud Firestore
+
+    Note over Svc, DB: Suscripción en tiempo real (onSnapshot)
+    
+    DB->>Svc: Cambio en los datos
+    Svc->>Svc: Mapeo de datos (Timestamp -> Date)
+    Svc->>UI: applicationsSignal.set(newData)
+    
+    Note right of UI: La UI se actualiza automáticamente<br/>sin recargar la página.
+```
+
+#### Decisiones Técnicas Clave
+- **Reactividad con Signals**: Uso de Angular Signals para actualizaciones de UI granulares, simplificando la gestión de estado comparado con RxJS tradicional.
+- **Sincronización Live**: Implementación de `onSnapshot` de Firestore para garantizar que el Dashboard y el Kanban estén siempre actualizados.
+- **Lógica Desacoplada**: Todas las interacciones con la base de datos y el mapeo de modelos están encapsulados en servicios, manteniendo los componentes limpios y enfocados en la UI.
+
+### 🚀 Despliegue (Vercel)
 Tu aplicación es una SPA estática que se conecta directamente a Firebase.
 1. Sube tu código a GitHub
 2. Ve a [Vercel](https://vercel.com) → New Project → Importa tu repositorio
@@ -70,6 +130,7 @@ Tu aplicación es una SPA estática que se conecta directamente a Firebase.
 5. ¡Desplegar!
 
 ### Historial de Versiones
+- **[1.5.0] (2026-05-16)** - Se añadió documentación completa de Arquitectura y Diseño con diagramas Mermaid.
 - **[1.4.1] (2026-05-10)** - Mejoras de UI en móvil: se amplió el tamaño de los formularios para mejor legibilidad y usabilidad.
 - **[1.4.0] (2026-05-10)** - Pantalla de carga inteligente para transiciones de Firebase Auth, UX mejorada y corrección de bloqueos de rutas.
 - **[1.3.0] (2026-05-10)** - Migración completa a Serverless. Se reemplazó el backend en Node.js por Firebase Auth + Firestore.
