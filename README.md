@@ -100,20 +100,27 @@ Your app is a fully static SPA that connects directly to Firebase.
 
 El proyecto sigue una arquitectura de **SPA Serverless**, priorizando la reactividad en tiempo real y la facilidad de mantenimiento.
 
-#### Flujo de Datos
+#### Vista General del Sistema
 ```mermaid
-sequenceDiagram
-    participant UI as Componente (Signal)
-    participant Svc as ApplicationService
-    participant DB as Cloud Firestore
-
-    Note over Svc, DB: Suscripción en tiempo real (onSnapshot)
+graph TD
+    User((Usuario))
     
-    DB->>Svc: Cambio en los datos
-    Svc->>Svc: Mapeo de datos (Timestamp -> Date)
-    Svc->>UI: applicationsSignal.set(newData)
+    subgraph "Frontend (Angular 21)"
+        UI[Componentes UI]
+        State[Gestión de Estado - Signals]
+        Service[ApplicationService]
+    end
     
-    Note right of UI: La UI se actualiza automáticamente<br/>sin recargar la página.
+    subgraph "Backend (Firebase)"
+        Auth[Firebase Auth]
+        Store[(Cloud Firestore)]
+    end
+    
+    User <--> UI
+    UI <--> State
+    State <--> Service
+    Service <--> Auth
+    Service <--> Store
 ```
 
 #### Decisiones Técnicas Clave
